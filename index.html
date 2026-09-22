@@ -1,60 +1,29 @@
-<!doctype html>
-<html lang="ru">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#080808">
-  <title>TDS38</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div class="app">
-  <header class="top">
-    <div class="brand">
-      <img src="logo.png" alt="TDS38" class="logo">
-      <div><b>TDS38</b><span>БОЛЬШЕ ЧЕМ МАГАЗИН</span><small>Иркутск • Шелехов • 38 регион</small></div>
-    </div>
-    <button class="icon-btn" id="searchBtn" aria-label="Поиск">⌕</button>
-  </header>
+<!doctype html><html lang="ru"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050505"><title>TDS38</title><link rel="stylesheet" href="style.css"></head>
+<body><div class="app">
+<header><div class="wordmark"><b>TDS<span>38</span></b><small>БОЛЬШЕ, ЧЕМ МАГАЗИН</small></div><button class="round" id="menu">☰</button></header>
+<main>
+<section class="hero">
+ <div class="smoke"></div><div class="heroText"><div class="eyebrow">TDS38 • 38 РЕГИОН</div>
+ <h1>ЯРКИЕ ВКУСЫ.<br><span>СИЛЬНЫЙ СТИЛЬ.</span></h1>
+ <p>Премиальная витрина ассортимента TDS38</p><button class="goldBtn" id="goCatalog">СМОТРЕТЬ КАТАЛОГ →</button></div>
+ <div class="heroProduct"><img src="assets/duall.jpg" alt="DUALL"></div>
+</section>
 
-  <main>
-    <section class="hero">
-      <div class="hero-copy">
-        <small>TDS38</small>
-        <h1>КАЧЕСТВО<br><em>В ДЕТАЛЯХ</em></h1>
-        <p>Каталог продукции и актуальное наличие в магазинах.</p>
-        <button id="catalogBtn">ПЕРЕЙТИ К КАТАЛОГУ →</button>
-      </div>
-      <div class="hero-art"><span>TDS38</span><small>38 REGION</small></div>
-    </section>
+<section class="cats" id="catalog">
+ <button data-jump="chew"><img src="assets/corvus.jpg"><b>ЖЕВАТЕЛЬНЫЙ<br>ТАБАК</b><i>→</i></button>
+ <button data-jump="aroma"><img src="assets/vliq.jpg"><b>АРОМАМИКСЫ</b><i>→</i></button>
+ <button data-jump="pods"><img src="assets/vaporesso.jpg"><b>POD-СИСТЕМЫ</b><i>→</i></button>
+</section>
 
-    <section class="search-wrap" id="searchWrap">
-      <input id="search" type="search" placeholder="Найти бренд…" autocomplete="off">
-    </section>
+<div class="titleRow"><div><small>TDS38 COLLECTION</small><h2>ПОПУЛЯРНЫЕ ТОВАРЫ</h2></div><button data-jump="chew">Все →</button></div>
+<section class="featured" id="featured"></section>
 
-    <section class="category-grid" id="categoryGrid"></section>
-    <div id="sections"></div>
-
-    <section class="info-card">
-      <div><small>TDS38</small><h2>В ТВОЁМ ГОРОДЕ</h2><p>Иркутск • Шелехов • 38 регион</p></div>
-      <div class="info-features"><span>◇ Оригинальная продукция</span><span>⌖ Актуальное наличие</span></div>
-    </section>
-  </main>
-
-  <nav class="bottom">
-    <button class="active" data-nav="home">⌂<span>Главная</span></button>
-    <button data-nav="catalog">▦<span>Каталог</span></button>
-    <button data-nav="info">ⓘ<span>Информация</span></button>
-    <button data-nav="profile">♙<span>Профиль</span></button>
-  </nav>
-
-  <div class="sheet hidden" id="sheet" role="dialog" aria-modal="true">
-    <div class="sheet-card">
-      <button class="close" id="closeSheet">×</button>
-      <div id="sheetContent"></div>
-    </div>
-  </div>
-</div>
-<script src="app.js"></script>
-</body>
-</html>
+<section class="brandSection" id="chew"><div class="titleRow"><div><small>КАТАЛОГ</small><h2>ЖЕВАТЕЛЬНЫЙ ТАБАК</h2></div></div><div class="grid" id="chewGrid"></div></section>
+<section class="brandSection" id="aroma"><div class="titleRow"><div><small>КАТАЛОГ</small><h2>АРОМАМИКСЫ</h2></div></div><div class="grid" id="aromaGrid"></div></section>
+<section class="brandSection" id="pods"><div class="titleRow"><div><small>КАТАЛОГ</small><h2>POD-СИСТЕМЫ</h2></div></div><div class="grid" id="podsGrid"></div></section>
+</main>
+<nav><button class="active" data-nav="top">⌂<span>Главная</span></button><button data-nav="catalog">⌕<span>Каталог</span></button><button data-nav="info">ⓘ<span>Информация</span></button><button data-nav="profile">♙<span>Профиль</span></button></nav>
+<div class="modal hidden" id="modal"><div class="modalCard"><button id="close">×</button><div id="modalBody"></div></div></div>
+</div><script src="app.js"></script></body></html>
