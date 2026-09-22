@@ -1,21 +1,57 @@
-const tg=window.Telegram?.WebApp; if(tg){tg.ready();tg.expand();}
-const products=[
-{id:1,name:'Red Bull 0.473',price:199,cat:'Напитки',icon:'🥤'},
-{id:2,name:'Monster Energy 0.5',price:169,cat:'Напитки',icon:'⚡'},
-{id:3,name:'Coca-Cola 0.33',price:99,cat:'Напитки',icon:'🥫'},
-{id:4,name:'Haribo Goldbears',price:179,cat:'Сладости',icon:'🍬'},
-{id:5,name:'Шоколад',price:149,cat:'Сладости',icon:'🍫'},
-{id:6,name:'Чипсы',price:159,cat:'Снеки',icon:'🍟'},
-{id:7,name:'Кофе',price:129,cat:'Другое',icon:'☕'},
-{id:8,name:'Вода 0.5',price:69,cat:'Напитки',icon:'💧'}];
-let cart=JSON.parse(localStorage.getItem('tds38cart')||'{}'); let page='home', filter='';
-const save=()=>localStorage.setItem('tds38cart',JSON.stringify(cart)); const count=()=>Object.values(cart).reduce((a,b)=>a+b,0);
-function nav(){return `<div class="nav"><button class="${page==='home'?'active':''}" onclick="go('home')"><i>⌂</i>Главная</button><button class="${page==='catalog'?'active':''}" onclick="go('catalog')"><i>▦</i>Каталог</button><button class="${page==='cart'?'active':''}" onclick="go('cart')"><i>🛒</i>Корзина ${count()?`(${count()})`:''}</button><button onclick="go('profile')"><i>♙</i>Профиль</button></div>`}
-function card(p){return `<div class="product"><div class="pic">${p.icon}</div><div class="info"><h3>${p.name}</h3><div class="priceRow"><span class="price">${p.price} ₽</span><button class="plus" onclick="add(${p.id})">+</button></div></div></div>`}
-function home(){return `<div class="top"><div class="brand"><img src="logo.png"><div><b>TDS38</b><small>магазин • 38 регион</small></div></div><div class="pill">🛒 ${count()}</div></div><div class="hero"><h1>Всё нужное — <span>рядом</span></h1><p>Каталог, актуальные предложения и удобное оформление в Telegram.</p><button class="btn" onclick="go('catalog')">Открыть каталог</button></div><input class="search" placeholder="🔎 Найти товар" oninput="search(this.value)"><div class="quick"><div>🔥<br>Хиты</div><div>✨<br>Новинки</div><div>％<br>Акции</div></div><div class="sectionHead"><h2>Категории</h2><span onclick="go('catalog')">Все →</span></div><div class="cats">${['Напитки','Сладости','Снеки','Другое'].map(c=>`<div class="cat" onclick="category('${c}')"><b>${c}</b><small>Открыть →</small></div>`).join('')}</div><div class="sectionHead"><h2>Популярное</h2></div><div class="products">${products.slice(0,4).map(card).join('')}</div><div class="notice">Первая тестовая версия. Каталог и условия оформления будут заменены на фактические данные магазина.</div>`}
-function catalog(){let arr=products.filter(p=>!filter||p.cat===filter||p.name.toLowerCase().includes(filter.toLowerCase()));return `<div class="top"><button class="back" onclick="go('home')">← Назад</button><b>Каталог</b><span>${arr.length} товаров</span></div><input class="search" placeholder="🔎 Поиск" oninput="filter=this.value;render()"><div class="quick">${['Напитки','Сладости','Снеки'].map(c=>`<div onclick="category('${c}')">${c}</div>`).join('')}</div><div class="sectionHead"><h2>${filter||'Все товары'}</h2><span onclick="filter='';render()">Сбросить</span></div><div class="products">${arr.map(card).join('')}</div>`}
-function cartPage(){let ids=Object.keys(cart).filter(id=>cart[id]>0);let total=ids.reduce((s,id)=>s+products.find(p=>p.id==id).price*cart[id],0);if(!ids.length)return `<button class="back" onclick="go('home')">← Назад</button><div class="empty"><h2>Корзина пуста</h2><p>Добавь товары из каталога.</p><button class="btn" onclick="go('catalog')">В каталог</button></div>`;return `<button class="back" onclick="go('home')">← Назад</button><div class="sectionHead"><h2>Корзина</h2></div>${ids.map(id=>{let p=products.find(x=>x.id==id);return `<div class="cartItem"><div><b>${p.name}</b><br><small>${p.price} ₽ × ${cart[id]}</small></div><div class="qty"><button onclick="qty(${id},-1)">−</button> ${cart[id]} <button onclick="qty(${id},1)">+</button></div></div>`}).join('')}<div class="total">Итого: ${total} ₽</div><button class="btn wide" onclick="go('checkout')">Продолжить</button>`}
-function checkout(){return `<button class="back" onclick="go('cart')">← Корзина</button><div class="sectionHead"><h2>Оформление</h2></div><input class="field" id="name" placeholder="Имя"><input class="field" id="phone" placeholder="Телефон"><input class="field" id="address" placeholder="Адрес / комментарий"><div class="notice">Это демонстрационное оформление. В следующей версии подключим передачу заказа продавцу и статусы.</div><button class="btn wide" onclick="done()">Подтвердить</button>`}
-function profile(){return `<button class="back" onclick="go('home')">← Назад</button><div class="empty"><h2>TDS38</h2><p>${tg?.initDataUnsafe?.user?.first_name?`Привет, ${tg.initDataUnsafe.user.first_name}!`:'Профиль покупателя появится после подключения backend.'}</p></div>`}
-function render(){document.getElementById('app').innerHTML=`<main class="app">${page==='home'?home():page==='catalog'?catalog():page==='cart'?cartPage():page==='checkout'?checkout():profile()}</main>${page!=='checkout'?nav():''}`}
-function go(p){page=p;if(p!=='catalog')filter='';render();scrollTo(0,0)} function add(id){cart[id]=(cart[id]||0)+1;save();tg?.HapticFeedback?.impactOccurred('light');render()} function qty(id,d){cart[id]=(cart[id]||0)+d;if(cart[id]<=0)delete cart[id];save();render()} function category(c){filter=c;page='catalog';render()} function search(v){filter=v;page='catalog';render()} function done(){alert('Тестовый заказ оформлен. На следующем этапе подключим отправку продавцу.');cart={};save();go('home')} render();
+const categories = [
+  {id:"chew", title:"Жевательный табак", icon:"◉", subtitle:"5 брендов"},
+  {id:"aroma", title:"Аромамиксы", icon:"♨", subtitle:"5 брендов"},
+  {id:"pods", title:"POD-системы", icon:"▯", subtitle:"3 бренда"}
+];
+const products = [
+  ["Corvus","chew"],["STELS","chew"],["KASTA","chew"],["Odens","chew"],["ICEBERG","chew"],
+  ["VLIQ","aroma"],["DUALL","aroma"],["МОНАШКА","aroma"],["BRYZGI","aroma"],["CHAKRA","aroma"],
+  ["VAPORESSO","pods"],["GEEKVAPE","pods"],["SMOANT","pods"]
+];
+const labels={chew:"Жевательный табак",aroma:"Аромамиксы",pods:"POD-системы"};
+const grid=document.querySelector("#categoryGrid"), sections=document.querySelector("#sections"), search=document.querySelector("#search");
+const sheet=document.querySelector("#sheet"), sheetContent=document.querySelector("#sheetContent");
+function productCard([name,type]){
+  const shape=type==="chew"?"tin":type==="aroma"?"bottle":"pod";
+  return `<article class="product" data-name="${name.toLowerCase()}" data-type="${type}">
+    <span class="badge">18+</span><div class="visual"><div class="${shape}">${name}</div></div>
+    <h3>${name}</h3><p>${labels[type]}</p><span class="stock">⌖ Наличие уточняйте в магазине</span>
+    <button class="detail" data-product="${name}" data-type="${type}">${type==="pods"?"Подробнее":"Посмотреть ассортимент"}</button>
+  </article>`;
+}
+function render(filter=""){
+  const q=filter.trim().toLowerCase();
+  sections.innerHTML="";
+  categories.forEach(c=>{
+    const list=products.filter(p=>p[1]===c.id && p[0].toLowerCase().includes(q));
+    if(!list.length)return;
+    sections.insertAdjacentHTML("beforeend",`<section class="section" id="${c.id}">
+      <div class="section-head"><h2>${c.title}</h2><button data-scroll="${c.id}">Все →</button></div>
+      <div class="products">${list.map(productCard).join("")}</div></section>`);
+  });
+  if(!sections.innerHTML) sections.innerHTML='<div class="empty">Ничего не найдено</div>';
+  bindDetails();
+}
+grid.innerHTML=categories.map(c=>`<button class="cat" data-target="${c.id}"><span class="emoji">${c.icon}</span><b>${c.title}</b><small>${c.subtitle}</small><i>→</i></button>`).join("");
+function scrollToId(id){document.getElementById(id)?.scrollIntoView({behavior:"smooth",block:"start"})}
+grid.addEventListener("click",e=>{const b=e.target.closest("[data-target]");if(b)scrollToId(b.dataset.target)});
+search.addEventListener("input",()=>render(search.value));
+document.querySelector("#searchBtn").addEventListener("click",()=>{document.querySelector("#searchWrap").scrollIntoView({behavior:"smooth"});search.focus()});
+document.querySelector("#catalogBtn").addEventListener("click",()=>scrollToId("categoryGrid"));
+function bindDetails(){
+  document.querySelectorAll(".detail").forEach(btn=>btn.addEventListener("click",()=>{
+    const name=btn.dataset.product, type=btn.dataset.type;
+    sheetContent.innerHTML=`<h2>${name}</h2><p>${labels[type]}</p><p>Карточка бренда в витрине TDS38. Здесь можно разместить описание, доступные варианты и актуальное наличие по торговым точкам.</p><p><b>18+</b> · Продажа через Mini App не осуществляется.</p>`;
+    sheet.classList.remove("hidden");
+  }));
+}
+document.querySelector("#closeSheet").addEventListener("click",()=>sheet.classList.add("hidden"));
+sheet.addEventListener("click",e=>{if(e.target===sheet)sheet.classList.add("hidden")});
+document.querySelectorAll(".bottom button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll(".bottom button").forEach(x=>x.classList.remove("active"));b.classList.add("active");
+  if(b.dataset.nav==="home")window.scrollTo({top:0,behavior:"smooth"});
+  if(b.dataset.nav==="catalog")scrollToId("categoryGrid");
+  if(b.dataset.nav==="info"){sheetContent.innerHTML="<h2>Информация</h2><p>TDS38 — витрина ассортимента магазина. Актуальное наличие уточняйте непосредственно в торговой точке.</p>";sheet.classList.remove("hidden")}
+  if(b.dataset.nav==="profile"){sheetContent.innerHTML="<h2>Профиль</h2><p>Раздел профиля подготовлен для следующей версии Mini App.</p>";sheet.classList.remove("hidden")}
+}));
+render();
