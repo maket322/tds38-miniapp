@@ -1,29 +1,95 @@
-<!doctype html><html lang="ru"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#050505"><title>TDS38</title><link rel="stylesheet" href="style.css"></head>
-<body><div class="app">
-<header><div class="wordmark"><b>TDS<span>38</span></b><small>БОЛЬШЕ, ЧЕМ МАГАЗИН</small></div><button class="round" id="menu">☰</button></header>
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050505">
+<title>TDS38</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+<div id="app">
+<header class="top">
+  <div class="logo">TDS<span>38</span><small>БОЛЬШЕ, ЧЕМ МАГАЗИН</small></div>
+  <button class="iconBtn" id="notify">♢</button>
+</header>
+
 <main>
-<section class="hero">
- <div class="smoke"></div><div class="heroText"><div class="eyebrow">TDS38 • 38 РЕГИОН</div>
- <h1>ЯРКИЕ ВКУСЫ.<br><span>СИЛЬНЫЙ СТИЛЬ.</span></h1>
- <p>Премиальная витрина ассортимента TDS38</p><button class="goldBtn" id="goCatalog">СМОТРЕТЬ КАТАЛОГ →</button></div>
- <div class="heroProduct"><img src="assets/duall.jpg" alt="DUALL"></div>
+<section id="home" class="page active">
+  <article class="hero">
+    <div class="heroCopy"><div class="script">CORVUS</div><p>СВОЙ ХАРАКТЕР<br>В КАЖДОЙ БАНКЕ</p><button data-open-category="chew">СМОТРЕТЬ КАТАЛОГ →</button></div>
+    <img src="corvus.jpg" alt="Corvus">
+  </article>
+  <div class="dots">● <span>● ● ●</span></div>
+  <div class="quick">
+    <button data-open-category="chew"><img src="odens.jpg"><span>ЖЕВАТЕЛЬНЫЙ<br>ТАБАК</span></button>
+    <button data-open-category="pods"><img src="vaporesso.jpg"><span>POD-СИСТЕМЫ</span></button>
+    <button data-open-category="aroma"><img src="duall.jpg"><span>АРОМАМИКСЫ</span></button>
+    <button data-open-category="other"><div class="placeholder">TDS38</div><span>ДРУГОЕ</span></button>
+  </div>
+  <div class="sectionHead"><h2>НОВИНКИ</h2><button data-nav="catalog">СМОТРЕТЬ ВСЕ →</button></div>
+  <div class="newGrid" id="newGrid"></div>
 </section>
 
-<section class="cats" id="catalog">
- <button data-jump="chew"><img src="assets/corvus.jpg"><b>ЖЕВАТЕЛЬНЫЙ<br>ТАБАК</b><i>→</i></button>
- <button data-jump="aroma"><img src="assets/vliq.jpg"><b>АРОМАМИКСЫ</b><i>→</i></button>
- <button data-jump="pods"><img src="assets/vaporesso.jpg"><b>POD-СИСТЕМЫ</b><i>→</i></button>
+<section id="catalog" class="page">
+  <div class="pageTitle"><h1>Каталог</h1><button class="iconBtn">☰</button></div>
+  <div class="search"><span>⌕</span><input id="search" placeholder="Поиск товаров, брендов, вкусов..."></div>
+  <div class="catGrid">
+    <button data-open-category="chew"><img src="corvus.jpg"><b>Жевательный<br>табак</b></button>
+    <button data-open-category="pods"><img src="vaporesso.jpg"><b>Pod-системы</b></button>
+    <button data-open-category="aroma"><img src="duall.jpg"><b>Аромамиксы</b></button>
+    <button data-open-category="other"><img src="smoant.jpg"><b>Другое</b></button>
+  </div>
+  <div id="searchResults" class="list"></div>
 </section>
 
-<div class="titleRow"><div><small>TDS38 COLLECTION</small><h2>ПОПУЛЯРНЫЕ ТОВАРЫ</h2></div><button data-jump="chew">Все →</button></div>
-<section class="featured" id="featured"></section>
+<section id="category" class="page">
+  <div class="backTitle"><button data-back>‹</button><h1 id="catTitle">Каталог</h1><button>≡</button></div>
+  <div id="chips" class="chips"></div>
+  <div id="productList" class="list"></div>
+</section>
 
-<section class="brandSection" id="chew"><div class="titleRow"><div><small>КАТАЛОГ</small><h2>ЖЕВАТЕЛЬНЫЙ ТАБАК</h2></div></div><div class="grid" id="chewGrid"></div></section>
-<section class="brandSection" id="aroma"><div class="titleRow"><div><small>КАТАЛОГ</small><h2>АРОМАМИКСЫ</h2></div></div><div class="grid" id="aromaGrid"></div></section>
-<section class="brandSection" id="pods"><div class="titleRow"><div><small>КАТАЛОГ</small><h2>POD-СИСТЕМЫ</h2></div></div><div class="grid" id="podsGrid"></div></section>
+<section id="product" class="page">
+  <div class="backTitle overlay"><button data-back>‹</button><div id="prodBrand">TDS38</div><button id="favTop">♡</button></div>
+  <div class="productVisual"><img id="prodImg"></div>
+  <div class="productInfo">
+    <h1 id="prodName"></h1><div id="prodMeta" class="muted"></div>
+    <div class="priceLine"><strong id="prodPrice"></strong><span class="available">● В наличии</span></div>
+    <div class="tags"><span>18+</span><span>Каталог</span><span>TDS38</span></div>
+    <div class="qtyRow"><button id="minus">−</button><b id="qty">1</b><button id="plus">+</button><button class="gold" id="saveItem">＋ ДОБАВИТЬ В СПИСОК</button></div>
+    <h3>О товаре</h3><p class="muted">Карточка товара TDS38. Здесь можно разместить описание, характеристики, вкус и актуальную информацию о наличии.</p>
+  </div>
+</section>
+
+<section id="saved" class="page">
+  <div class="pageTitle"><h1>Список</h1><button id="clearSaved" class="link">Очистить</button></div>
+  <div id="savedList" class="list"></div>
+  <div class="summary"><span>Сумма выбранного:</span><strong id="savedTotal">0 ₽</strong></div>
+  <div class="notice">Список сохраняет выбранные позиции для просмотра. Дистанционное оформление регулируемой продукции через Mini App не осуществляется.</div>
+</section>
+
+<section id="profile" class="page">
+  <div class="pageTitle"><h1>Профиль</h1><button class="iconBtn">⚙</button></div>
+  <div class="profileCard"><div class="avatar">♛</div><div><h2 id="userName">Гость</h2><p id="userSub">TDS38</p></div></div>
+  <div class="menu">
+    <button data-profile-action="saved">♡ <span>Избранное</span><i>›</i></button>
+    <button data-profile-action="history">◷ <span>Недавно просмотренные</span><i>›</i></button>
+    <button data-profile-action="support">◉ <span>Поддержка</span><i>›</i></button>
+    <button data-profile-action="about">ⓘ <span>О магазине</span><i>›</i></button>
+  </div>
+  <div class="profileLogo">TDS<span>38</span><small>БОЛЬШЕ, ЧЕМ МАГАЗИН</small></div>
+</section>
 </main>
-<nav><button class="active" data-nav="top">⌂<span>Главная</span></button><button data-nav="catalog">⌕<span>Каталог</span></button><button data-nav="info">ⓘ<span>Информация</span></button><button data-nav="profile">♙<span>Профиль</span></button></nav>
-<div class="modal hidden" id="modal"><div class="modalCard"><button id="close">×</button><div id="modalBody"></div></div></div>
-</div><script src="app.js"></script></body></html>
+
+<nav>
+<button class="active" data-nav="home">⌂<span>Главная</span></button>
+<button data-nav="catalog">▤<span>Каталог</span></button>
+<button data-nav="saved"><i id="badge">0</i>♡<span>Список</span></button>
+<button data-nav="profile">♙<span>Профиль</span></button>
+</nav>
+
+<div id="toast"></div>
+</div>
+<script src="app.js"></script>
+</body></html>
